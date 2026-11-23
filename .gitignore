@@ -1,0 +1,21 @@
+# 비밀값
+.env
+*.local
+.webhooks*
+
+# 로컬 데이터
+data/
+data-test/
+logs/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# 편집기
+.idea/
+.vscode/
+
+# clasp (스크립트 ID)
+.clasp.json
+app_script/projects/*/*.gs
