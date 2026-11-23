@@ -1,0 +1,21 @@
+{
+ "programmers": {"ts": "1794530000.000100", "text": "", "blocks": [
+  {"type": "header", "text": {"type": "plain_text", "text": "오늘의 프로그래머스 문제  -  56", "emoji": true}},
+  {"type": "section", "text": {"type": "mrkdwn", "text": "*`레벨 0`*  <https://school.programmers.co.kr/learn/courses/30/lessons/181936|181936번 : 공배수>"}},
+  {"type": "context", "elements": [{"type": "mrkdwn", "text": "참여 인원 : *55,278명*\t정답률 : *89.00%*\t전송일 : *26/11/13*"}]}]},
+ "swea": {"ts": "1794443600.000100", "text": "", "blocks": [
+  {"type": "header", "text": {"type": "plain_text", "text": "오늘의 SWEA 문제  -  56"}},
+  {"type": "section", "text": {"type": "mrkdwn", "text": "*`레벨 1`*  <https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV5abc|6329번 : 연습 문제>"}},
+  {"type": "context", "elements": [{"type": "mrkdwn", "text": "참여 인원 : *1,204명*\t정답률 : *70.21%*\t전송일 : *26/11/12*"}]}]},
+ "exhausted": {"ts": "1794600000.000100", "text": "", "blocks": [
+  {"type": "section", "text": {"type": "mrkdwn", "text": "⚠️ *[알림]*\n프로그래머스 시트에 등록된 모든 문제를 풀었습니다!"}}]},
+ "contest": {"ts": "1794400000.000100", "text": "의료 AI 해커톤\nhttps://linkareer.com/activity/365981", "blocks": [
+  {"type": "section", "text": {"type": "mrkdwn", "text": "*2026 포항 MICE 창업 해커톤*"}},
+  {"type": "image", "title": {"type": "plain_text", "text": "공모전 포스터"}, "image_url": "https://api.linkareer.com/attachments/993668", "alt_text": "공모전 포스터"},
+  {"type": "actions", "elements": [{"type": "button", "text": {"type": "plain_text", "text": "상세 내용 보기"}, "url": "https://linkareer.com/activity/365981", "action_id": "button_click"}]}]},
+ "aitimes": {"ts": "1794610000.000100", "text": "", "blocks": [
+  {"type": "section", "text": {"type": "mrkdwn", "text": "*<https://www.aitimes.com/news/articleView.html?idxno=203456|오픈AI, 새 추론 모델 공개>*\n\n오픈AI가 새로운 추론 모델을 공개했다. 이번 모델은 코딩 성능이 크게..."}, "accessory": {"type": "image", "image_url": "https://x/y.jpg", "alt_text": "thumbnail"}},
+  {"type": "divider"}]},
+ "geeknews": {"ts": "1794620000.000100", "text": "*<https://news.hada.io/topic?id=37140&amp;utm_source=slack&amp;utm_medium=bot&amp;utm_campaign=x|새로운 LLM 추론 서버 공개>*\n- 오픈소스 추론 서버가 공개됨  \n- 처리량이 크게 향상됐다…", "blocks": []},
+ "other": {"ts": "1794630000.000100", "text": "점심 뭐 먹지", "blocks": []}
+}
