@@ -31,3 +31,11 @@ def test_choice_from_reply():
     assert router.choice_from_reply("공모전", []) == "contest"
     assert router.choice_from_reply("#인공지능-소식", []) == "news"
     assert router.choice_from_reply("글쎄", []) is None
+
+
+def test_weak_keywords_alone_do_not_decide_channel():
+    for q in ("프로그램 참가 신청 방법 알려줘", "발표 자료 만드는 법 알려줘", "신제품 출시 일정"):
+        p = router.parse(q)
+        assert p.channel is None and p.candidates and len(p.candidates) < 3
+    assert router.parse("공모전 참가 자격 알려줘").channel == "contest"
+    assert router.parse("AI 소식 중 오픈AI 발표 내용").channel == "news"

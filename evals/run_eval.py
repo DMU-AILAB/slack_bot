@@ -119,7 +119,7 @@ def suite_retrieval(args) -> dict:
                 continue
             used += 1
             got_id = find_title(f"{short} 시상 내역 알려줘", titles)
-            if got_id == m["activity_id"]:
+            if got_id == m["activity_id"] or (got_id and M.same_title(titles.get(got_id), m["title"])):
                 t_ok += 1
             else:
                 fails.append({"kind": "contest_title_lookup", "title": m["title"], "query": short,

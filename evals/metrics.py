@@ -82,6 +82,21 @@ def percentile(values: list[float], p: float) -> float:
     return round(s[min(len(s) - 1, int(p * len(s)))], 2)
 
 
+def _norm_title(t: str) -> str:
+    return re.sub(r"[^0-9a-z가-힣]", "", (t or "").lower())
+
+
+def same_title(a: str | None, b: str | None) -> bool:
+    """같은 공고의 재게시·꼬리말 차이는 같은 제목으로 본다(기호·공백 무시, 포함 관계 또는 유사도 0.85 이상)."""
+    from difflib import SequenceMatcher
+    x, y = _norm_title(a), _norm_title(b)
+    if not x or not y:
+        return False
+    if x == y or (min(len(x), len(y)) >= 8 and (x in y or y in x)):
+        return True
+    return SequenceMatcher(None, x, y).ratio() >= 0.85
+
+
 def shorten_title(title: str, n_tokens: int = 4) -> str:
     """검색 평가용: 대괄호 태그를 빼고 앞쪽 몇 단어만 남겨 '대충 기억나는 이름'을 흉내 낸다."""
     t = re.sub(r"[\[\(【][^\]\)】]*[\]\)】]", " ", title)

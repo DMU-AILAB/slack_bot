@@ -62,3 +62,11 @@ def test_grounding_numbers_and_invented_entities():
     bad = M.grounding("저장용량이 13.5GWh로 늘었고 일론 머스크가 주장했다", ev)
     assert not bad["numbers_ok"] and any("머스크" in t for t in bad["ungrounded"])
     assert M.grounding("젠슨 황의 악수 거래", ev)["rate"] == 0.0
+
+
+def test_same_title_accepts_reposts_but_not_different_contests():
+    assert M.same_title("2026년 물류데이터·AI 활용 공모전", "2026년 물류데이터 AI 활용 공모전")
+    assert M.same_title("[총상금 2,750만원] 2026 데이터+AI 혁신챌린지", "2026 데이터+AI 혁신챌린지")
+    assert M.same_title("제1회 B.D.A.I × Superb AI AI 해커톤 참가자 연장 모집", "제1회 B.D.A.I × Superb AI 해커톤 참가자 모집")
+    assert not M.same_title("2026 AI 해커톤", "2026 데이터 분석 경진대회")
+    assert not M.same_title(None, "2026 AI 해커톤")

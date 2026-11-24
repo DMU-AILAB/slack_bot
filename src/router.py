@@ -13,11 +13,13 @@ ALIASES = {
 }
 
 KEYWORDS = {
-    "contest": ["공모전", "대회", "해커톤", "경진대회", "마감", "접수", "시상", "수상", "참가", "우수작"],
-    "news": ["소식", "뉴스", "이슈", "기사", "동향", "발표", "출시"],
+    "contest": ["공모전", "대회", "해커톤", "경진대회", "마감", "접수", "시상", "수상", "우수작"],
+    "news": ["소식", "뉴스", "이슈", "기사", "동향"],
     "coding": ["코딩테스트", "코딩 테스트", "코테", "오늘의 문제", "프로그래머스", "programmers", "swea", "swexpert",
                "풀이", "해설", "힌트"],
 }
+# 일상어로도 자주 쓰이는 단어. 강한 키워드가 하나도 없을 때는 채널을 단정하지 않고 되묻기 후보로만 쓴다.
+WEAK_KEYWORDS = {"contest": ["참가"], "news": ["발표", "출시"]}
 _NUM_PROBLEM = re.compile(r"\d{2,}\s*번")
 
 
@@ -59,6 +61,10 @@ def parse(text: str) -> Parsed:
         hits.append("coding")
     if len(hits) == 1:
         return Parsed(hits[0], t)
+    if not hits:
+        weak = [ch for ch, kws in WEAK_KEYWORDS.items() if any(k in low for k in kws)]
+        if weak:
+            return Parsed(None, t, candidates=weak)
     # 둘 이상이거나 하나도 없으면 되묻기
     return Parsed(None, t, candidates=hits or list(CHANNEL_LABEL))
 

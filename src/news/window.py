@@ -35,6 +35,8 @@ def parse_window(q: str, today: date) -> tuple[date, date, str]:
         mon = today - timedelta(days=today.weekday() + 7)
         return mon, mon + timedelta(days=6), "지난주"
     if "이번 주" in q or "이번주" in q:
+        if today.weekday() < 2:          # 월·화요일은 이번 주 분량이 하루~이틀뿐이라 최근 7일로 넓힌다
+            return today - timedelta(days=6), today, "최근 7일(이번 주가 막 시작돼 넓힘)"
         return today - timedelta(days=today.weekday()), today, "이번 주"
     if "이번 달" in q or "이번달" in q:
         return today.replace(day=1), today, "이번 달"
