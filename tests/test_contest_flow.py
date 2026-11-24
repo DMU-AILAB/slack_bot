@@ -59,3 +59,9 @@ def test_new_in_last_week_and_followup_detail(seeded):
     assert {x["id"] for x in last} == {"1", "2", "4"}   # 11/18 수집분, 마감된 3번은 기본적으로 제외
     text, _ = flow.answer("의료 데이터 해커톤 시상 내역 알려줘", TODAY)
     assert "의료 데이터 해커톤" in text and "시상" in text or "찾지 못했습니다" in text
+
+
+def test_plain_section_strips_title_and_label():
+    from src.contest.flow import _plain_section
+    assert _plain_section("2026 AI 공모전\n시상 내역: 최우수상 300만원\n우수상 50만원") == "최우수상 300만원\n우수상 50만원"
+    assert _plain_section("제목만") == "제목만"

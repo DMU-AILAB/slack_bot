@@ -15,10 +15,25 @@ log = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------- 다운로드
+class SheetNotCsv(Exception):
+    """CSV가 아니라 HTML(로그인·편집 화면)이 돌아온 경우. URL 값은 메시지에 넣지 않는다."""
+
+
+def csv_url(url: str) -> str:
+    """편집 화면 주소(/d/<id>/edit?…#gid=N)를 CSV 내보내기 주소로 바꾼다. 게시 주소(/d/e/…/pub)는 그대로 둔다."""
+    m = re.search(r"/spreadsheets/d/([A-Za-z0-9_-]+)/(?:edit|view)", url)
+    if not m or "/d/e/" in url:
+        return url
+    gid = re.search(r"gid=(\d+)", url)
+    return f"https://docs.google.com/spreadsheets/d/{m[1]}/export?format=csv" + (f"&gid={gid[1]}" if gid else "")
+
+
 def fetch_csv(url: str) -> list[dict]:
-    r = requests.get(url, timeout=config.HTTP_TIMEOUT_SEC)
+    r = requests.get(csv_url(url), timeout=config.HTTP_TIMEOUT_SEC)
     r.raise_for_status()
     r.encoding = "utf-8"
+    if "html" in r.headers.get("content-type", "").lower() or r.text.lstrip()[:15].lower().startswith(("<!doctype", "<html")):
+        raise SheetNotCsv("시트 응답이 CSV가 아님: '웹에 게시'(CSV) 주소이거나 링크 공유가 켜져 있어야 함")
     return parse_csv_text(r.text)
 
 
@@ -26,7 +41,9 @@ def parse_csv_text(text: str) -> list[dict]:
     reader = csv.DictReader(io.StringIO(text))
     rows = []
     for raw in reader:
-        rows.append({(k or "").strip(): (v or "").strip() for k, v in raw.items()})
+        # 헤더보다 칸이 많은 행은 DictReader가 키 None에 리스트로 담는다 → 버린다
+        rows.append({k.strip(): (v or "").strip() for k, v in raw.items()
+                     if isinstance(k, str) and not isinstance(v, list)})
     return rows
 
 

@@ -24,13 +24,15 @@ def _problem_block(p: Problem) -> str:
     return f"<문제>\n{p.title}\n{p.statement[:STATEMENT_MAX_CHARS]}\n{_fmt_examples(p)}\n</문제>\n"
 
 
-def _rules(p: Problem) -> str:
-    mods = ", ".join(ALLOWED_MODULES)
+def _rules(p: Problem, show_modules: bool = False) -> str:
+    # 허용 모듈 목록을 처음부터 보여 주면 소형 모델이 불필요하게 import math 등을 쓰려 든다
+    # (gemma3:1b 8문제 A/B: 검증 통과 25~38% → 63%, docs/EVALUATION.md). 금지된 import가 나온 뒤에만 알려 준다.
+    mods = f"- 사용할 수 있는 모듈: {', '.join(ALLOWED_MODULES)}\n" if show_modules else ""
     if p.kind == "stdio":
         sig = "표준 입력으로 받고 표준 출력으로 낸다. 출력은 각 테스트케이스마다 \"#번호 결과\" 형식."
     else:
         sig = f"def solution({', '.join(p.params) or '...'}): 함수만 작성한다. 입출력(input, print) 코드는 쓰지 않는다."
-    return (f"위 문제를 Python 3으로 풀어라.\n- 사용할 수 있는 모듈: {mods}\n- {sig}\n"
+    return (f"위 문제를 Python 3으로 풀어라.\n{mods}- {sig}\n"
             "출력 형식: 먼저 접근 방법을 3~5문장으로 쓰고, 이어서 ```python 코드블록 하나만 쓴다.\n문제 전문을 그대로 옮기지 마라.")
 
 
@@ -51,7 +53,7 @@ def feedback_block(failed: RunResult, example: dict, kind: str) -> str:
 
 
 def solve(p: Problem, feedback: str | None = None, prev_code: str = "") -> tuple[str, str]:
-    prompt = _problem_block(p) + _rules(p)
+    prompt = _problem_block(p) + _rules(p, show_modules=bool(feedback and "허용되지 않은 모듈" in feedback))
     if feedback:
         prompt += f"\n\n이전 코드:\n```python\n{prev_code}\n```\n{feedback}"
     out = llm.generate(prompt, system=False, temperature=0.4 if feedback else config.GEN_TEMPERATURE,

@@ -47,7 +47,11 @@ def parse_programmers(html_str: str) -> tuple[str, str, list[str], list[dict], s
     md = soup.select_one(".guide-section-description .markdown") or soup.select_one(".markdown")
     statement = web.fragment_to_text(str(md)) if md else ""
     cat = re.search(r'challenge_category(?:&quot;|")\s*:\s*(?:&quot;|")(\w+)', html_str)
-    kind = "sql" if (cat and cat[1].lower() == "sql") or re.search(r"\bSELECT\b", statement) else "function"
+    # 프로그래머스 SQL 문제의 분류값은 'database'이고 편집기 언어는 mysql/oracle이다 (실제 페이지로 확인)
+    is_sql = ((cat and cat[1].lower() in ("sql", "database"))
+              or re.search(r'data-language=(?:"|&quot;)(?:mysql|oracle)', html_str) is not None
+              or re.search(r"\bSELECT\b|SQL\s*문을\s*작성", statement) is not None)
+    kind = "sql" if is_sql else "function"
     params, examples = [], []
     tables = md.find_all("table") if md else []
     table = next((t for t in tables if re.search(r"result|return|answer", t.get_text(" ").lower().split("tbody")[0][:200])), None) or (tables[0] if tables else None)

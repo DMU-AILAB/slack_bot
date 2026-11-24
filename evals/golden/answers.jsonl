@@ -1,0 +1,18 @@
+{"id": "c01", "q": "현재 모집 중인 공모전 알려줘", "min_items": 3, "open_only": true}
+{"id": "c02", "q": "AI 공모전 알려줘", "min_items": 1, "open_only": true}
+{"id": "c03", "q": "이번 주에 마감되는 공모전 알려줘", "empty_ok": true, "open_only": true, "deadline_within_days": 7}
+{"id": "c04", "q": "마감 임박한 공모전 3일 이내로 알려줘", "empty_ok": true, "open_only": true, "deadline_within_days": 3}
+{"id": "c05", "q": "새로 올라온 공모전 있어?", "empty_ok": true, "open_only": true}
+{"id": "c06", "q": "마감된 공모전도 보여줘", "min_items": 3}
+{"id": "c07", "q": "해커톤 공모전 알려줘", "empty_ok": true, "contains_any": ["해커톤", "hackathon", "Hackathon", "HACKATHON"]}
+{"id": "c08", "q": "영상 공모전 알려줘", "empty_ok": true, "contains_any": ["영상", "UCC", "숏폼", "미디어", "콘텐츠"]}
+{"id": "c09", "dynamic": "contest_detail", "aspect": "시상 내역", "note": "시트에서 시상 정보가 있는 공모전을 골라 질문을 만든다"}
+{"id": "c10", "dynamic": "contest_detail", "aspect": "참가 자격", "note": "참가 자격 정보가 있는 공모전"}
+{"id": "n01", "q": "이번 주 AI 뉴스 정리해줘", "min_items": 2}
+{"id": "n02", "q": "최근 3일 인공지능 소식 알려줘", "min_items": 1}
+{"id": "n03", "q": "오늘 중요한 이슈 3가지 알려줘", "empty_ok": true, "max_numbered": 3}
+{"id": "n04", "q": "최근 7일 중요한 이슈 5가지만 알려줘", "min_items": 1, "max_numbered": 5}
+{"id": "n05", "q": "엔비디아 관련 소식 알려줘", "empty_ok": true, "contains_any": ["엔비디아", "NVIDIA", "Nvidia", "GPU", "찾지 못했습니다"]}
+{"id": "n06", "q": "OpenAI 소식 정리해줘", "empty_ok": true, "contains_any": ["OpenAI", "오픈AI", "GPT", "챗GPT", "찾지 못했습니다"]}
+{"id": "n07", "q": "지난주 AI 이슈 알려줘", "empty_ok": true, "max_numbered": 5}
+{"id": "n08", "q": "에이전트 관련 기사 있어?", "empty_ok": true}

@@ -1,5 +1,6 @@
 """공모전 검색과 답변 조립 (상세구현명세서 8.1). 목록과 링크는 코드가 조립하고 LLM은 상세 항목 요약에만 쓴다."""
 import logging
+import re
 from datetime import date, timedelta
 
 from src import config, llm
@@ -10,6 +11,7 @@ from src.rag.store import get_store
 from src.sources import web
 
 log = logging.getLogger(__name__)
+SHORT_SECTION_CHARS = 120      # 이보다 짧은 항목은 모델 요약 없이 원문을 보여 준다
 LOW_RELEVANCE_DISTANCE = 0.55  # [측정] 코사인 거리. 이보다 멀면 "정확히 맞는 공고 없음"으로 안내
 
 
@@ -37,6 +39,13 @@ def _int_to_date(n: int) -> date | None:
 def _one_line(s: str, n: int) -> str:
     s = norm_text(s.replace("\n", " "))
     return s if len(s) <= n else s[:n - 1] + "…"
+
+
+def _plain_section(doc: str) -> str:
+    """'제목\n시상 내역: ...' 형태의 청크에서 제목 줄과 항목 이름을 떼어 본문만 남긴다."""
+    lines = [l for l in doc.splitlines() if l.strip()]
+    body = "\n".join(lines[1:]) if len(lines) > 1 else (lines[0] if lines else "")
+    return re.sub(r"^[^:：\n]{2,10}[:：]\s*", "", body, count=1).strip()
 
 
 def _item(meta: dict, today: date) -> dict:
@@ -168,14 +177,16 @@ def _answer_detail(cq: ContestQuery, aid: str, title: str, today: date) -> tuple
     if not body or key == "overview" and len(body) < 20:
         txt = f"{head}\n\n요청하신 항목({key})은 자료에서 찾지 못했습니다. 상세 페이지에서 확인해 주세요.\n{_footer()}"
         return txt, [{"id": aid, "title": title, "url": it["url"]}]
-    summary = body
-    try:
-        out = llm.generate(f"<자료>\n{body[:1500]}\n</자료>\n질문: {cq.raw}\n자료에 적힌 내용만 정리해서 3문장 이내로 답해라.",
-                           run_name="contest-detail")
-        if out and "찾지 못했습니다" not in out[:20]:
-            summary = out
-    except llm.LLMUnavailable:
-        raise
-    except Exception:
-        log.exception("상세 요약 실패, 원문 사용")
+    summary = _plain_section(body)
+    # 근거가 짧으면 요약할 것이 없다. 소형 모델이 "찾지 못했다"와 "기타로 되어 있다"를 함께 쓰는 모순을 막기 위해 원문 그대로 보여 준다.
+    if len(summary) > SHORT_SECTION_CHARS:
+        try:
+            out = llm.generate(f"<자료>\n{body[:1500]}\n</자료>\n질문: {cq.raw}\n자료에 적힌 내용만 정리해서 3문장 이내로 답해라.",
+                               run_name="contest-detail")
+            if out and "찾지 못했습니다" not in out:   # 자료가 있는데 '찾지 못했다'고 하면 모순이므로 원문 사용
+                summary = out
+        except llm.LLMUnavailable:
+            raise
+        except Exception:
+            log.exception("상세 요약 실패, 원문 사용")
     return f"{head}\n\n{summary}\n\n{_footer()}", [{"id": aid, "title": title, "url": it["url"]}]

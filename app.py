@@ -9,6 +9,7 @@ from src import testmode
 TEST_MODE = testmode.apply(sys.argv)   # src.config를 import하기 전에 호출해야 한다
 
 import logging
+import re
 import sqlite3
 import threading
 import time
@@ -29,6 +30,14 @@ _sem = threading.Semaphore(1)       # Ollama는 한 번에 하나만 잘 돌아�
 _waiting = 0
 _wait_lock = threading.Lock()
 _seen: "OrderedDict[str, float]" = OrderedDict()   # 슬랙 재전송 이벤트 중복 방지
+
+
+_MENTION = re.compile(r"<@[UW][A-Z0-9]+(?:\|[^>]*)?>")
+
+
+def strip_mention(text: str) -> str:
+    """'<@U123> 질문' → '질문'. 질문 안의 다른 사용자 멘션도 지운다."""
+    return re.sub(r"\s+", " ", _MENTION.sub(" ", text)).strip()
 
 
 def _duplicate(key: str) -> bool:
@@ -114,12 +123,8 @@ def main() -> int:
     from slack_bolt.adapter.socket_mode import SocketModeHandler
     app = App(token=config.env("SLACK_BOT_TOKEN"))
 
-    @app.event("message")
-    def on_message(event, client):
+    def process(event, client, text):
         global _waiting
-        if event.get("channel_type") != "im" or event.get("bot_id") or event.get("subtype"):
-            return
-        text = (event.get("text") or "").strip()
         if not text or _duplicate(event.get("client_msg_id") or event["ts"]):
             return
         channel, user, ts = event["channel"], event["user"], event["ts"]
@@ -135,6 +140,19 @@ def main() -> int:
         finally:
             with _wait_lock:
                 _waiting -= 1
+
+    @app.event("message")
+    def on_message(event, client):
+        if event.get("channel_type") != "im" or event.get("bot_id") or event.get("subtype"):
+            return
+        process(event, client, (event.get("text") or "").strip())
+
+    @app.event("app_mention")
+    def on_mention(event, client):
+        """채널에서 @봇 으로 부른 경우. 답변은 해당 메시지의 스레드에 단다(후속 질문도 같은 스레드에서 @봇)."""
+        if event.get("bot_id") or event.get("subtype"):
+            return
+        process(event, client, strip_mention(event.get("text") or ""))
 
     if TEST_MODE:
         banner = testmode.banner()

@@ -19,3 +19,6 @@ __pycache__/
 # clasp (스크립트 ID)
 .clasp.json
 app_script/projects/*/*.gs
+
+# 평가 결과(재생성 가능)
+evals/results/

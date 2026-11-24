@@ -1,0 +1,49 @@
+{"q": "현재 모집 중인 공모전 알려줘", "channel": "contest", "intent": "search"}
+{"q": "AI 공모전 뭐 있어?", "channel": "contest", "intent": "search"}
+{"q": "이번 주에 마감되는 공모전 알려줘", "channel": "contest", "intent": "deadline_soon"}
+{"q": "마감 임박한 공모전 보여줘", "channel": "contest", "intent": "deadline_soon"}
+{"q": "3일 이내 마감인 공모전", "channel": "contest", "intent": "deadline_soon"}
+{"q": "새로 올라온 공모전 있어?", "channel": "contest", "intent": "new"}
+{"q": "이번 주 새로 올라온 해커톤 알려줘", "channel": "contest", "intent": "new"}
+{"q": "공모전 수상작들의 특징을 분석해줘", "channel": "contest", "intent": "winners"}
+{"q": "데이터 분석 공모전 우수작 알려줘", "channel": "contest", "intent": "winners"}
+{"q": "대학생이 참가할 수 있는 공모전 추천해줘", "channel": "contest", "intent": "search"}
+{"q": "마감된 공모전도 보여줘", "channel": "contest", "intent": "search"}
+{"q": "#공모전 영상 아이디어 대회", "channel": "contest", "intent": "search"}
+{"q": "#2-공모전 상금 큰 거 알려줘", "channel": "contest", "intent": "search"}
+{"q": "공모전 시상 내역 알려줘", "channel": "contest", "intent": "search"}
+{"q": "해커톤 일정 알려줘", "channel": "contest", "intent": "search"}
+{"q": "공공데이터 활용 공모전 참가 자격이 뭐야?", "channel": "contest", "intent": "search"}
+{"q": "이번 대회 접수 기간이 언제야?", "channel": "contest", "intent": "search"}
+{"q": "마감일이 언제까지인지 알려줘", "channel": "contest", "intent": "search", "ok_ask": true}
+{"q": "이번 주 AI 뉴스 정리해줘", "channel": "news"}
+{"q": "최근 3일 인공지능 소식 알려줘", "channel": "news"}
+{"q": "오늘 중요한 이슈 5가지만 알려줘", "channel": "news"}
+{"q": "엔비디아 관련 소식 있어?", "channel": "news"}
+{"q": "LLM 동향 알려줘", "channel": "news"}
+{"q": "어제 나온 기사 요약해줘", "channel": "news"}
+{"q": "#인공지능-소식 지난주 이슈 알려줘", "channel": "news"}
+{"q": "GPT 새 모델 출시 소식 알려줘", "channel": "news"}
+{"q": "오늘 소식 알려줘", "channel": "news"}
+{"q": "요즘 AI 업계에서 뭐가 핫해?", "channel": "news", "ok_ask": true}
+{"q": "시상식 소식 알려줘", "channel": "news", "ok_ask": true}
+{"q": "오늘의 코딩테스트 문제 알려줘", "channel": "coding"}
+{"q": "프로그래머스 181936번 풀어줘", "channel": "coding"}
+{"q": "swea 2072 풀이 알려줘", "channel": "coding"}
+{"q": "코테 힌트 줘", "channel": "coding"}
+{"q": "오늘 문제 해설해줘", "channel": "coding", "ok_ask": true}
+{"q": "1234번 문제 알려줘", "channel": "coding"}
+{"q": "#코딩테스트 어제 문제 알려줘", "channel": "coding"}
+{"q": "SW Expert 문제 풀어줘", "channel": "coding", "ok_ask": true}
+{"q": "백준 1000번 풀어줘", "channel": "coding"}
+{"q": "알고리즘 문제 추천해줘", "channel": "coding", "ok_ask": true}
+{"q": "안녕", "channel": "ask"}
+{"q": "도움말", "channel": "ask"}
+{"q": "너는 누구야?", "channel": "ask"}
+{"q": "마감 공모전이랑 AI 소식 같이 알려줘", "channel": "ask"}
+{"q": "코테 공모전 알려줘", "channel": "ask"}
+{"q": "프로그램 참가 신청 방법 알려줘", "channel": "ask", "note": "'참가'만으로 공모전으로 오분류하기 쉬움"}
+{"q": "모델 학습 방법 알려줘", "channel": "ask", "note": "일반 질문은 채널 자료로 답하지 않는다"}
+{"q": "발표 자료 만드는 법 알려줘", "channel": "ask", "note": "'발표'만으로 소식으로 오분류하기 쉬움"}
+{"q": "#잡담 안녕", "channel": "unsupported"}
+{"q": "#general 오늘 뭐해", "channel": "unsupported"}
