@@ -13,6 +13,13 @@ def env(name: str, default: str | None = None) -> str | None:
     return v if v not in (None, "") else default
 
 
+def env_int(name: str, default: int) -> int:
+    try:
+        return int(env(name, str(default)))
+    except ValueError:
+        return default
+
+
 # 테스트 채널을 쓸 때 운영 데이터와 섞이지 않도록 BOT_DATA_DIR=data-test 처럼 분리한다.
 _data = env("BOT_DATA_DIR")
 DATA_DIR = (ROOT / _data if _data and not Path(_data).is_absolute() else Path(_data)) if _data else ROOT / "data"
@@ -27,14 +34,14 @@ LOG_DIR = ROOT / "logs"
 GEN_MODEL = env("GEN_MODEL", "gemma3:1b")
 EMBED_MODEL = env("EMBED_MODEL", "bge-m3")
 OLLAMA_HOST = env("OLLAMA_HOST", "http://localhost:11434")
-NUM_CTX = 4096
+NUM_CTX = env_int("NUM_CTX", 4096)               # 느린 CPU(라즈베리파이)에서는 2048~3072로 줄이면 빨라짐
 GEN_TEMPERATURE = 0.2
-GEN_NUM_PREDICT = 400
-GEN_NUM_PREDICT_CODE = 900
-LLM_TIMEOUT_SEC = 120
+GEN_NUM_PREDICT = env_int("GEN_NUM_PREDICT", 400)
+GEN_NUM_PREDICT_CODE = env_int("GEN_NUM_PREDICT_CODE", 900)
+LLM_TIMEOUT_SEC = env_int("LLM_TIMEOUT_SEC", 120)      # 느린 CPU에서는 300 정도로
 
 # --- 검색·분할 ---
-REFRESH_INTERVAL_MIN = 60
+REFRESH_INTERVAL_MIN = env_int("REFRESH_INTERVAL_MIN", 60)
 CHUNK_SIZE, CHUNK_OVERLAP = 500, 50
 TOP_K_CONTEST, TOP_K_NEWS = 6, 6
 

@@ -22,3 +22,6 @@ app_script/projects/*/*.gs
 
 # 평가 결과(재생성 가능)
 evals/results/
+
+# NAS 접속 정보(비밀번호 포함)
+NAS_*.pdf

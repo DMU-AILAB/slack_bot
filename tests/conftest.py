@@ -24,6 +24,9 @@ def tmp_data(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "DATA_DIR", tmp_path)
     monkeypatch.setattr(config, "CACHE_DIR", tmp_path / "cache")
     monkeypatch.setattr(config, "STATE_FILE", tmp_path / "state.json")
+    monkeypatch.setattr(config, "CHROMA_DIR", tmp_path / "chroma")          # 운영 벡터스토어를 건드리지 않도록
+    # 테스트가 실제 슬랙·시트·네트워크에 닿지 않게 한다(봇이 채널에 초대되면 결과가 달라지는 문제 방지).
+    monkeypatch.setattr(indexer, "refresh_if_stale", lambda name: False)
     monkeypatch.setattr(indexer, "CODING_INDEX", tmp_path / "cache" / "coding_index.json")
     for sub in ("problems", "articles", "contests", "search"):
         (tmp_path / "cache" / sub).mkdir(parents=True)
